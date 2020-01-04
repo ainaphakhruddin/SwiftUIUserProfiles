@@ -15,9 +15,19 @@ struct ProfileHost: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20.0) {
-            HStack{
-                Spacer()
-                EditButton()
+            HStack {
+                
+                Button(action: {
+                       self.draftProfile = self.userData.profile
+                       self.mode?.animation().wrappedValue = .inactive
+                   })
+                {
+                    Text("Cancel")
+                }
+                           
+               Spacer()
+               
+               EditButton()
             }
             if self.mode?.wrappedValue == .inactive
             {
@@ -26,6 +36,15 @@ struct ProfileHost: View {
             else
             {
                 ProfileEditor(profile: $draftProfile)
+                .onAppear
+                    {
+                        self.draftProfile = self.userData.profile
+                        
+                }
+            .onDisappear
+                {
+                    self.userData.profile = self.draftProfile
+                }
             }
         }
         .padding()
